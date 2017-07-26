@@ -1,6 +1,6 @@
 {
-  "name": "bookshelf-model-loader",
-  "version": "0.9.8",
+  "name": "funsociety-bookshelf-model-loader",
+  "version": "0.9.9",
   "description": "A opinionated Bookshelf model loader with bookshelf-modelbase",
   "main": "index.js",
   "scripts": {
