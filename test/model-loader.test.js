@@ -3,8 +3,9 @@ var expect = require('chai').expect;
 var knexConfig = {
   client: 'sqlite3',
   connection: {
-    filename: './test/tests.sqlite'
+    filename: './test/tests.sqlite',
   },
+  useNullAsDefault: true,
   debug: true
 };
 var Bookshelf = require('bookshelf');
@@ -52,7 +53,7 @@ describe('bookshelf-model-loader tests', function () {
       path: __dirname + '/models'
     });
 
-    expect(Models.Base).to.be.undefined();
+    expect(Models.Base).to.be.a('undefined');
   });
 
 
@@ -61,8 +62,8 @@ describe('bookshelf-model-loader tests', function () {
       path: __dirname + '/models'
     });
 
-    expect(Models.Base).to.exist();
-    expect(Models.Bookshelf).to.exist();
+    expect(Models.Base).to.be.a('function');
+    expect(Models.Bookshelf).to.be.a('object');
   });
 
 
@@ -71,7 +72,7 @@ describe('bookshelf-model-loader tests', function () {
       path: __dirname + '/models'
     });
 
-    expect(Models.User).to.exist();
+    expect(Models.User).to.be.a('function');
   });
 
 
@@ -80,80 +81,78 @@ describe('bookshelf-model-loader tests', function () {
       path: __dirname + '/models'
     });
 
-    expect(Models.User.paginate).to.exist();
+    expect(Models.User.paginate).to.be.a('function');
   });
 
 
-  it('should return a list of the users', function (done) {
+  it('should return a list of the users', function () {
     var Models = require('../').init(bookshelf, {
       path: __dirname + '/models'
     });
 
-    Models.User.paginate().then(function (users) {
-      expect(users).to.exist();
-      expect(users.items).to.exist();
-      expect(users.meta).to.exist();
-      done();
+    return Models.User.paginate().then(function (users) {
+      expect(users).to.be.a('object');
+      expect(users.items).to.be.a('object');
+      expect(users.meta).to.be.a('object');
     });
 
   });
 
 
-  it('should find the user', function (done) {
+  it('should find the user', function () {
     var Models = require('../').init(bookshelf, {
       path: __dirname + '/models'
     });
 
-    Models.User.findOne({id: 1}).then(function (user) {
-      expect(user).to.exist();
-      done();
+    return Models.User.findOne({id: 1}).then(function (user) {
+      expect(user).to.be.a('object');
     });
-
   });
 
 
-  it('should soft delete the user', function (done) {
+  it('should soft delete the user', function () {
     var Models = require('../').init(bookshelf, {
       path: __dirname + '/models'
     })
 
-    Models.User.destroy({id: 1}).then(function (user) {
-      expect(user).to.exist();
-      expect(user.get('deleted_at')).not.to.be.null();
-    }).then(function () {
+    return Models.User.destroy({id: 1})
+    .then(function (user) {
+      expect(user).to.be.a('object');
+      expect(user.get('deleted_at')).not.equal(null);
+    })
+    .then(function () {
       Models.User.findOne({id: 1}, {withTrashed: true}).then(function (user) {
-        expect(user).to.exist();
-        expect(user.get('deleted_at')).not.to.be.null();
-        done();
+        expect(user).to.be.a('object');
+        expect(user.get('deleted_at')).not.equal(null);
       })
     });
 
-  })
+  });
 
 
-  it('not return a soft deleted user', function (done) {
+  it('not return a soft deleted user', function () {
     var Models = require('../').init(bookshelf, {
       path: __dirname + '/models'
     })
 
-    Models.User.findOne({id: 2}).then(function (user) {
-      expect(user).to.be.null();
-      done();
-    });
+    return Models.User.findOne({id: 2}).then(function (user) {
+      expect(user).to.be(null);
+    })
+    .catch(() => {});
 
-  })
+  });
 
 
-  it('if force delete is true the record should be deleted', function (done) {
+  it('if force delete is true the record should be deleted', function () {
     var Models = require('../').init(bookshelf, {
       path: __dirname + '/models'
     })
 
-    Models.User.destroy({id: 1, forceDelete: true}).then(function (user) {
+    return Models.User.destroy({id: 1, forceDelete: true}).then(function (user) {
       Models.User.findOne({id: 1}, {withTrashed: true}).then(function (user) {
-        expect(user).to.be.null();
-        done();
+        expect(user).to.equal(null);
       })
+      .catch(() => {});
     });
 
   })
