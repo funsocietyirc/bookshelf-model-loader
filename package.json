@@ -20,17 +20,17 @@
   "author": "Josh Holloway <josh@imjoshholloway.co.uk>",
   "license": "MIT",
   "dependencies": {
-    "bluebird": "^2.8.2",
-    "bookshelf-modelbase": "^1.5.1",
-    "lodash": "^2.4.1",
+    "bluebird": "^3.5.0",
+    "bookshelf-modelbase": "^2.10.4",
+    "lodash": "^4.17.4",
     "require-tree": "^1.0.1"
   },
   "devDependencies": {
-    "bookshelf": "^0.7.9",
-    "chai": "1.10.x",
+    "bookshelf": "^0.10.4",
+    "chai": "^4.1.0",
     "istanbul": "0.3.x",
-    "knex": "^0.7.3",
-    "mocha": "2.1.x",
+    "knex": "^0.13.0",
+    "mocha": "^3.4.2",
     "sqlite3": "^3.0.4"
   },
   "engines": {
