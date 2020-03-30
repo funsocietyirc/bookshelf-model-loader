@@ -26,7 +26,7 @@
     "require-tree": "^1.0.1"
   },
   "devDependencies": {
-    "bookshelf": "^0.10.4",
+    "bookshelf": "^0.15.2",
     "chai": "^4.1.0",
     "istanbul": "0.3.x",
     "knex": "^0.13.0",
